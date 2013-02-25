@@ -51,20 +51,20 @@ kissy1.3就不需要该配置。
 **提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件。
 
 ### 3. 使用setItem方法保存数据
-	offline.setItem(key, value, deadline);
-	第三个参数deadline是毫秒数，用于key的过期时间，过期后自动清除key
-	**提醒**：key和value必须都是字符串 
+offline.setItem(key, value, deadline);
+**提醒**：key和value必须都是字符串,第三个参数deadline是毫秒数，用于key的过期时间，过期后自动清除key
+	
 
 ```javascript
 		//将key1 存到浏览器里30天
         offline.setItem('key1','value1',1000*60*60*24*30);
 ```
-	返回值：成功返回true,失败返回false
+返回值：成功返回true,失败返回false
 
 
 
 ### 4. 常规方法
-	getItem获得,removeItem移除，clear清空
+getItem获得,removeItem移除，clear清空
 
 ### 5. 新增方法	
 
