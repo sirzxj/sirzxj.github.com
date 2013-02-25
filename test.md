@@ -57,7 +57,7 @@ kissy1.3就不需要该配置。
 ```
 
 ### 3. 使用setItem方法保存数据
-  offline.setItem(key, value, deadline);
+	offline.setItem(key, value, deadline);
 	第三个参数deadline是毫秒数，用于key的过期时间，过期后自动清除key
 	**提醒**：key和value必须都是字符串 
 
@@ -74,14 +74,14 @@ kissy1.3就不需要该配置。
 
 ### 5. 新增方法	
 
-####timeRemain
+#### timeRemain
 	获取某个key存储的剩余时间（毫秒数）
-####size
+#### size
 	获取本地存储的字段数
-####getAll
+#### getAll
 	获取全部存储的字段
 	**提醒**：getAll默认返回的是所有key和value 经过 stringify 的字符串，当传递true参数时候，则返回对象。
-####usedByte
+#### usedByte
 	返回浏览器中本地存储已经使用的字节数。
 ### 6. 其他
 	在使用setItem,removeItem,clear的时候，分别为为KISSY.Offline 触发了 setItem，removeItem,clear等事件，用于监听	 
