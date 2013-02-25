@@ -39,22 +39,16 @@ KISSY.config({
 kissy1.3就不需要该配置。
 
 
-### 1.加载Offline模块
+
+
+### 1.加载Offline模块,初始化Offline
 
 ```javascript
     KISSY.use('gallery/offline/1.0/index', function (S, Offline) {
-
-    })
-```
-**提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件。
-
-### 2.初始化Offline
-
-```javascript
-    KISSY.use('gallery/uploader/1.4/index', function (S, Offline) {
         var offline = new Offline();
     })
 ```
+**提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件。
 
 ### 3. 使用setItem方法保存数据
 	offline.setItem(key, value, deadline);
@@ -85,5 +79,6 @@ kissy1.3就不需要该配置。
 	返回浏览器中本地存储已经使用的字节数。
 
 ### 6. 其他
+
 	在使用setItem,removeItem,clear的时候，分别为为KISSY.Offline 触发了 setItem，removeItem,clear等事件，用于监听	 
 
