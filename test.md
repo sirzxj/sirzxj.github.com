@@ -69,7 +69,7 @@ getItem获得,removeItem移除，clear清空
 ### 5. 新增方法	
 
 * timeRemain
-	获取某个key存储的剩余时间（毫秒数）
+	获取某个key存储的剩余时间（毫秒数）,没有限制的key会返回-1
 * size
 	获取本地存储的字段数
 * getAll
