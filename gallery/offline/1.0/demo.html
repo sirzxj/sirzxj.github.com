@@ -111,9 +111,9 @@
 				$('#J_Tbody').append($(arr.join('')));
 			});
 
-			S.later(function(){
-				$('#J_ShowAll').fire('click');
-			},1000);
+			
+			$('#J_ShowAll').fire('click');
+			
 
 			$('#J_Save').on('click',function(){
 				a.setItem($('#J_a').val(),$('#J_b').val(),$('#J_c').val());
