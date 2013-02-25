@@ -79,6 +79,5 @@ kissy1.3就不需要该配置。
 	返回浏览器中本地存储已经使用的字节数。
 
 ### 6. 其他
-
-	在使用setItem,removeItem,clear的时候，分别为为KISSY.Offline 触发了 setItem，removeItem,clear等事件，用于监听	 
+在使用setItem,removeItem,clear的时候，分别为为KISSY.Offline 触发了 setItem，removeItem,clear等事件，用于监听	 
 
