@@ -83,6 +83,7 @@ kissy1.3就不需要该配置。
 	**提醒**：getAll默认返回的是所有key和value 经过 stringify 的字符串，当传递true参数时候，则返回对象。
 * usedByte
 	返回浏览器中本地存储已经使用的字节数。
+
 ### 6. 其他
 	在使用setItem,removeItem,clear的时候，分别为为KISSY.Offline 触发了 setItem，removeItem,clear等事件，用于监听	 
 
