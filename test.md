@@ -56,8 +56,8 @@ offline.setItem(key, value, deadline);
 	
 
 ```javascript
-		//将key1 存到浏览器里30天
-        offline.setItem('key1','value1',1000*60*60*24*30);
+//将key1 存到浏览器里30天
+offline.setItem('key1','value1',1000*60*60*24*30);
 ```
 返回值：成功返回true,失败返回false
 
