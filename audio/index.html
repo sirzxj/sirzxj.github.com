@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<style type="text/css">
+		body{
+			padding: 100px;
+		}
+		*{
+			margin:0;
+			padding:0;
+			font-style: normal;
+			font-size:15px;
+		}
+		.bar-content{
+			margin-top: 30px;
+			height: 12px;
+			width: 300px;
+			border-radius: 5px;
+			background: #ddd;
+			position:relative;
+		}
+		.progress-bar{
+			height: 12px;
+			border-radius: 5px;
+			background: #f60;
+			display: inline-block;
+			position: absolute;
+			top:0;
+			left:0;
+		}
+		.bar-content .drag{
+			width: 10px;
+			height: 20px;
+			display: inline-block;
+			background: #999;
+			border-radius: 5px;
+			position: absolute;
+			top:-5px;
+			left:-3px;
+		}
+	</style>
+	<input type="button" id="J_Start" value=" 播 放 ">
+	<input type="button" id="J_Stop" value=" 停 止 ">
+	<span class="show-time">
+			<em id="J_Now" class="now">
+				2:00
+			</em>
+			/
+			<em id="J_Total" class="total">
+				4:00
+			</em>
+		</span>
+	<audio id="J_Audio" src="./mmj.mp3" >
+
+		<p>If you are reading this, it is because your browser does not support the audio element.</p>
+	</audio>
+
+
+	
+	<div class="bar-content" id="J_BarContent">
+		<p id="J_ProgressBar" class="progress-bar"></p>
+		
+		<em id="J_Drag" class="drag" draggable="true" title="还不口以拽，可以直接点击滚动条"></em> 
+	</div>
+	<script>
+		(function(){
+			var $ = function(id){
+				return document.getElementById(id);
+			}
+			var elAudio = $('J_Audio');
+			var elStart = $('J_Start');
+			var elStop = $('J_Stop');
+			var elBar = $('J_ProgressBar');
+			var elNow = $('J_Now');
+			var elTotal = $('J_Total');
+			var elProgress = $('J_Drag');
+
+			elStart.onclick = function(){
+				elAudio.play();
+			}
+			elStop.onclick = function(){
+				elAudio.pause();
+			}
+
+			/**
+			 * 格式化时间		
+			 */
+			function formatTime(num){
+				return Math.floor( num/60 ) + ':' + Math.floor(num%60);
+			}
+			
+
+			var totalTime,nowTime,len,prog,repeat;
+
+			//设置进度
+			setTimeout(function(){
+				repeat = arguments.callee;
+				prog = setTimeout(function(){
+					// 歌曲的总时间
+					totalTime = elAudio.duration;
+					// 当前播放的时间 （值可set）
+					nowTime = elAudio.currentTime;
+					len =  (nowTime / totalTime) * 300;
+					elBar.style.width = len + 'px';
+					elNow.innerHTML = formatTime(nowTime);
+					elTotal.innerHTML = formatTime(totalTime);
+					elProgress.style.left = (len - 3) +'px';
+					repeat();
+				},300);
+			},0);
+
+			//选择进度
+			$('J_BarContent').onclick= function(e){
+				var totalLeft = e.x;
+				var eLeft = this.offsetLeft;
+				var tLeft = totalLeft - eLeft;
+				var totalTime = elAudio.duration;
+				elAudio.currentTime = (tLeft / 300) * totalTime;
+				elProgress.style.left = (tLeft - 3) +'px';
+			}
+		})();
+	</script>
+		
+	
+</body>
+</html>
