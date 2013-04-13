@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+	<title>音乐播放器</title>
+	<link rel="stylesheet" href="http://a.tbcdn.cn/s/kissy/1.3.0/css/dpl/base-min.css" />
+	<script src="http://a.tbcdn.cn/??s/kissy/1.3.0/seed-min.js,apps/ks/zoo.js"></script>
+</head>
+<body>
+	<style type="text/css">
+		
+
+
+
+	</style>
+
+
+	<style type="text/css">
+		.music-handle{
+			width: 100px;
+			margin: 0 auto;
+		}
+		.music-pause,.music-play{
+			height:52px;
+			width:52px;
+			background: url(bg.png) -14px -29px; 
+			display: inline-block;
+			border-radius: 25px;
+			text-indent: -9999px;
+			margin: auto;
+		}
+		/**/
+		.music-play{
+			background-position:-73px -29px;
+		}
+
+		.music-progress{
+			width: 210px;
+			margin:0 auto;
+		}
+		
+		.bar-content{			
+			height: 8px;
+			width: 210px;
+			border-radius: 5px;
+			background: #ddd;
+			position:relative;
+			float:left;
+		
+		}
+		.progress-bar{
+			height: 8px;
+			border-radius: 5px;
+			background: #f60;
+			display: inline-block;
+			position: absolute;
+			top:-12px;
+			left:0;
+
+		}
+		.music-time{
+			width: 210px;
+			margin: 10px auto 0;
+		}
+		.music-time .now,.music-time .total{
+			font-size:12px;
+			font-style:normal;
+		}
+		.music-time .total{
+			float: right;
+		}
+
+
+.drag{
+			width: 10px;
+			height: 20px;
+			display: inline-block;
+			background: #999;
+			border-radius: 5px;
+			position: absolute;
+			top:-5px;
+
+		}
+
+
+	</style>
+	<p class="music-handle">
+		<a href="javascript:void(0);" id="J_HandleMusic" class="music-pause">
+			播放/停止
+		</a>
+	</p>
+	<div class="music-time">
+		<em id="J_Now" class="now">
+			0:00
+		</em>
+		<em id="J_Total" class="total">
+			0:00
+		</em>
+	</div>
+	<div class="music-progress">
+		
+		<div class="bar-content" id="J_BarContent">
+			<p id="J_ProgressBar" class="progress-bar"></p>
+			<em id="J_Drag" class="drag" draggable="true" title="还不口以拽，可以直接点击滚动条"></em> 
+		</div>
+		
+	</div>
+
+
+	
+	
+	<script>
+		KISSY.add('player',function(S,Node,Event,DD){
+			var re = {};
+			var $ = Node.all;
+			var player;
+			var progress;
+			//DD.Draggable({
+				//node:'#J_BarContent'
+			//});
+			/**
+			 * 转换时间
+			 * @return {String} 返回时间
+			 */
+			function formatTime(num){
+				var seconds = Math.floor(num % 60);
+				if(seconds <= 9){
+					seconds = '0' + seconds;
+				}
+				return Math.floor( num/60 ) + ':' + seconds;
+			}
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+			S.mix(re,{
+				init:function(src){
+					this.createAudio(src);					
+					this._bindEvent();					
+				},
+				createAudio:function(src){
+					player = new Audio();
+					player.src = src; 
+				},
+				getAudio:function(){
+					return player;
+				},
+				stop:function(){
+					player.pause();
+				},
+				/**
+				 * 进度
+				 * @param  {String} control [description]
+				 * @return {[type]}         [description]
+				 */
+				progress:function(control){
+					if(control){
+						player.currentTime = control;
+						return this;
+					}else{
+						return player.currentTime;
+					}
+				},
+				/**
+				 * 获取歌曲的总时间
+				 * @return {String} 时间
+				 */
+				getTotalTime:function(){
+					return player.duration;
+				},
+				/**
+				 * 更新进度
+				 * @param  {Number} rate 频率（单位毫秒）
+				 * @return {[type]}      [description]
+				 */
+				updateProgress:function(rate){
+					var realRate = rate || 300;
+					progress = S.later(function(){
+						re._updateProgress();
+					},realRate,true);
+					return this;
+				},
+				_bindEvent:function(){
+					this._switchMusic();
+					this._setProgress();
+					this._playEnd();
+					this._dragProgress();
+				},
+				_switchMusic:function(){
+					var self = this,
+						elTarget;
+					$('#J_HandleMusic').on('click',function(){
+						self._changeStatus();
+					});
+				},
+
+				/**
+				 * 播放结束
+				 */
+				_playEnd:function(){
+					var self = this;
+					elTarget = $('#J_HandleMusic');
+					$(player).on('ended',function(){			
+						
+						S.later(function(){
+							elTarget.replaceClass('music-play','music-pause');
+							progress.cancel();
+						},100);
+					});
+				},
+				_changeStatus:function(){
+					var self = this;
+					elTarget = $('#J_HandleMusic');
+					if(elTarget.hasClass('music-pause')){
+						player.play();
+						elTarget.replaceClass('music-pause','music-play');
+						this.updateProgress();						
+					}else{
+						progress.cancel();
+						elTarget.replaceClass('music-play','music-pause');
+						self.stop();
+					}
+				},
+				/**
+				 * 进度变化
+				 */
+				_updateProgress:function(){
+					var elBar = $('#J_ProgressBar');
+					var elNow = $('#J_Now');
+					var elTotal = $('#J_Total');
+					// 当前播放的时间 （值可set）
+					var nowTime = player.currentTime,
+						// 歌曲的总时间
+						totalTime = this.getTotalTime();
+					var len =  (nowTime / totalTime) * 210;
+					elBar.css({width:len});
+					elNow.html(formatTime(nowTime));
+					elTotal.html(formatTime(totalTime));
+					
+				},
+				_dragProgress:function(){
+					var elDrag = $('#J_Drag');
+					var self = this;
+					var drag=new DD.Draggable({
+					    node:elDrag,
+					    cursor:'move',
+					    move:true,
+					    plugins:[ new Constrain({
+           						constrain:window // 限制拖动区域为视窗区域
+       					}) ]
+					});
+					drag.on('dragend',function(e){
+						var left = elDrag.css('left');
+						if(left > 207) left = 207;
+						elDrag.css('left',left);
+						player.currentTime = ((parseFloat(left,10)+3)/210)*self.getTotalTime();
+					})
+				},
+				/**
+				 * 手动设置进度
+				 */
+				_setProgress:function(){
+					var self = this;
+					$('#J_BarContent').on('click',function(e){
+						player.currentTime = (e.offsetX / 210) * self.getTotalTime();
+						self._updateProgress();
+					});
+				}
+			});
+			return re;
+
+		},{
+			requires:['node','event','dd']
+		});
+
+		KISSY.use('player',function(S,Player){
+			Player.init('hd.mp3');			
+		});
+
+
+	</script>
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+<!-- 
+<html>  
+<head><title>拖动效果函数演示 by Longbill.cn</title>  
+<style>  
+body   
+{  
+    font-size:12px;  
+    color:#333333;  
+    border : 0px solid blue;  
+}  
+div  
+{  
+    position : absolute;  
+    background-color : #c3d9ff;  
+    margin : 0px;  
+    padding : 5px;  
+    border : 0px;  
+    width : 100px;  
+    height:100px;  
+}  
+</style>  
+</head>  
+<body>  
+<script>  
+function drag(o,s)  
+{  
+    if (typeof o == "string") o = document.getElementById(o);  
+    o.orig_x = parseInt(o.style.left) - document.body.scrollLeft;  
+    o.orig_y = parseInt(o.style.top) - document.body.scrollTop;  
+    o.orig_index = o.style.zIndex;  
+          
+    o.onmousedown = function(a)  
+    {  
+        this.style.cursor = "move";  
+        this.style.zIndex = 10000;  
+        var d=document;  
+        if(!a)a=window.event;  
+        var x = a.clientX+d.body.scrollLeft-o.offsetLeft;  
+        var y = a.clientY+d.body.scrollTop-o.offsetTop;  
+        //author: www.longbill.cn  
+        d.ondragstart = "return false;"  
+        d.onselectstart = "return false;"  
+        d.onselect = "document.selection.empty();"  
+                  
+        if(o.setCapture)  
+            o.setCapture();  
+        else if(window.captureEvents)  
+            window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);  
+
+        d.onmousemove = function(a)  
+        {  
+            if(!a)a=window.event;  
+            o.style.left = a.clientX+document.body.scrollLeft-x;  
+            o.style.top = a.clientY+document.body.scrollTop-y;  
+            o.orig_x = parseInt(o.style.left) - document.body.scrollLeft;  
+            o.orig_y = parseInt(o.style.top) - document.body.scrollTop;  
+        }  
+
+        d.onmouseup = function()  
+        {  
+            if(o.releaseCapture)  
+                o.releaseCapture();  
+            else if(window.captureEvents)  
+                window.captureEvents(Event.MOUSEMOVE|Event.MOUSEUP);  
+            d.onmousemove = null;  
+            d.onmouseup = null;  
+            d.ondragstart = null;  
+            d.onselectstart = null;  
+            d.onselect = null;  
+            o.style.cursor = "normal";  
+            o.style.zIndex = o.orig_index;  
+        }  
+    }  
+      
+    if (s)  
+    {  
+        var orig_scroll = window.onscroll?window.onscroll:function (){};  
+        window.onscroll = function ()  
+        {  
+            orig_scroll();  
+            o.style.left = o.orig_x + document.body.scrollLeft;  
+            o.style.top = o.orig_y + document.body.scrollTop;  
+        }  
+    }  
+}  
+</script>  
+
+<div id="div1" style="left:10px;top:10px;">div1:我可以被拖动</div>  
+<div id="div2" style="left:120px;top:10px;background-color : #f3d9ff">div2:来拖我呀</div>  
+<div id="div3" style="left:230px;top:10px;background-color : #c3ffff">div3:我随便你拖</div>  
+<div id="div4" style="left:10px;top:120px;background-color : #c3d944">div4:我可以随窗口滑动，把我拖到最下面，然后滚动网页看看</div>  
+<div id="div5" style="left:120px;top:120px;background-color : #f3d944">作者: Longbill
+<a href=http://www.longbill.cn target=_blank>www.longbill.cn</a>  
+</div>  
+<div id="div6" style="left:230px;top:120px;background-color : #e3f944;width:200px;">参数说明:
+  
+drag(obj [,scroll]);
+  
+obj:对象的id或对象本身;
+  
+scroll(可选):对象是否随窗口拖动而滑动，默认为否
+  
+鼠标右键查看源代码  
+</div>  
+
+
+<script>  
+drag("div1");  
+drag("div2");  
+drag("div3");  
+drag("div4",1);  
+drag("div5",1);  
+drag("div6",1);  
+
+
+</script>  
+
+</body> 
+ -->
