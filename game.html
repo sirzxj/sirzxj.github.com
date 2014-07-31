@@ -5,6 +5,27 @@
 	<title>Document</title>
 </head>
 <body>
+<style>
+	h1{
+		font-size:18px;
+	}
+	h2{
+		font-size:16px;
+	}
+	h3{
+		font-size:14px;	
+	}
+	*{
+		font-size:12px;
+	}
+	img{
+		margin:10px 0 10px 20px;
+		max-width:95%;
+	}
+	
+</style>
+<h1>欢迎来看攻略</h1>
+<p>有问题 sina微博 @呃嘀呻呐<p>
 	<h2>需要工具:<h2>
 
     <ol>
@@ -16,9 +37,13 @@
   
   <h3>1、下载安装 Charles（百度google一下）</h3>
   <h3>2、查看ip地址，windows（在命令行里输入ipconfg，linux ifconfig)</h3>
+  	<img src="http://ww1.sinaimg.cn/mw690/71ad6815gw1eiwbk0tawlj207i06sgm7.jpg">
   <h3>3、Charles抓包设置：打开Charles，选择Proxy→Proxy Setting，输入端口号，选中Enable transparent HTTP Proxying</h3>
+  	<img src="http://ww2.sinaimg.cn/mw690/71ad6815gw1eiwbk17duqj209v066wem.jpg">
   <h3>4、将手机连接的wifi设置手动代理，主机名就是自己的电脑，端口是就上面的8888</h3>
+  	<img src="http://ww4.sinaimg.cn/mw690/71ad6815gw1eiwbk1ps6jj208206pjre.jpg">
   <h3>5、这个时候手机上访问的请求就可以在电脑端的Charles的左侧看到了请求的列表了，依次按照下图点开main.min.js文件，右键 Save Response可以将文件保存到电脑上</h3>
+  	<img src="http://ww3.sinaimg.cn/mw690/71ad6815gw1eiwbkxvwdkj20a008iwfi.jpg">
   <h3>6、用编辑器（记事本）打开此文件，将下面代码帖到文本底部，保存文件</h3>
 <pre>
 setInterval(function(){
@@ -44,16 +69,9 @@ setInterval(function(){
 },300);
 </pre>
      <h3>7、切换到Charles窗口，右键上面选中的文件，选择 Map local，弹框里面点击Choose，选择到上面编辑的文件，点击ok</h3>
+    	<img src="http://ww2.sinaimg.cn/mw690/71ad6815gw1eiwbozwfh5j209p0acjrz.jpg">
     <h3>8、用手机打开游戏，就可以看到自动加分的效果了</h3>
 
-
-
-
-
-
-     
-     
-     
      
 
 
