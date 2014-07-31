@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h2>需要工具:<h2>
+
+    <ol>
+      <li>1、硬件：电脑</li>
+      <li>2、软件：Charles</li>
+      <li>3、其他：wifi环境</li>
+    </ol>
+  <h2>具体步骤：</h2>
+  
+  <h3>1、下载安装 Charles（百度google一下）</h3>
+  <h3>2、查看ip地址，windows（在命令行里输入ipconfg，linux ifconfig)</h3>
+  <h3>3、Charles抓包设置：打开Charles，选择Proxy→Proxy Setting，输入端口号，选中Enable transparent HTTP Proxying</h3>
+  <h3>4、将手机连接的wifi设置手动代理，主机名就是自己的电脑，端口是就上面的8888</h3>
+  <h3>5、这个时候手机上访问的请求就可以在电脑端的Charles的左侧看到了请求的列表了，依次按照下图点开main.min.js文件，右键 Save Response可以将文件保存到电脑上</h3>
+  <h3>6、用编辑器（记事本）打开此文件，将下面代码帖到文本底部，保存文件</h3>
+<pre>
+setInterval(function(){
+  var els = $('#box span');
+  var getCls = function(els){
+     // var result
+     var cls0 = $( els[0] ).css('background-color');
+     var cls1 = $( els[1] ).css('background-color');
+     var cls2 = $( els[2] ).css('background-color');
+     if(cls0 === cls1)return cls0;
+     else return cls2;
+  }
+  var cls = getCls(els);
+   els.each(function(v,k){
+     var el = $(k);
+     if(el.css('background-color') !== cls){
+          el.css('background-color','#000');
+          el.trigger('click');
+          el.trigger('touchend');
+          return false;
+     }
+  });
+},300);
+</pre>
+     <h3>7、切换到Charles窗口，右键上面选中的文件，选择 Map local，弹框里面点击Choose，选择到上面编辑的文件，点击ok</h3>
+    <h3>8、用手机打开游戏，就可以看到自动加分的效果了</h3>
+
+
+
+
+
+
+     
+     
+     
+     
+
+
+
+     
+     
+
+</body>
+</html>
