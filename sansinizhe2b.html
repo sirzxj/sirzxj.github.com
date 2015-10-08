@@ -2,7 +2,9 @@
 <html lang="en" >
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<link rel="shortcut icon" href="http://www.52shangou.com/favicon.ico" type="image/x-icon" />
+
+	<title>闪死你这2B</title>
 </head>
 <body>
 	<style type="text/css">
@@ -16,24 +18,26 @@
 		
 	</h1>
 	<script type="text/javascript">
-
-		var i = 0;
-		bgColor = '#000';
-		ftColor = '#fff';
-		var h1 = document.getElementsByTagName('h1')[0];
-		var html = document.documentElement;
-		h1.innerHTML = decodeURIComponent('%E9%97%AA%E6%AD%BB%E4%BD%A0%E8%BF%992B');
-		setInterval(function(){
-			if(++i % 2 == 0){
-				bgColor = '#fff';
-				ftColor = '#000';
-			}else{
-				bgColor = '#000';
-				ftColor = '#f00';
-			}
-			h1.style.color = ftColor;
-			html.style.backgroundColor = bgColor;
-		},50);
+		(function(){
+			var i = 0;
+			var bgColor = '#000';
+			var ftColor = '#fff';
+			var h1 = document.getElementsByTagName('h1')[0];
+			var html = document.documentElement;
+			h1.innerHTML = decodeURIComponent('%E9%97%AA%E6%AD%BB%E4%BD%A0%E8%BF%992B');
+			setInterval(function(){
+				if(++i % 2 == 0){
+					bgColor = '#fff';
+					ftColor = '#000';
+				}else{
+					bgColor = '#000';
+					ftColor = '#f00';
+				}
+				h1.style.color = ftColor;
+				html.style.backgroundColor = bgColor;
+			},50);
+		})();
+		
 	</script>
 </body>
 </html>
